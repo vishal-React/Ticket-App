@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../Firebase";
 import { useNavigate } from "react-router-dom";
@@ -9,45 +9,29 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const [eye, seteye] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [eye, setEye] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigate("/dashboard", { replace: true });
+      if (user && localStorage.getItem("role")) {
+        navigate("/"); // Redirect to the dashboard if already logged in
       }
-      setLoading(false); 
     });
 
-    return () => unsubscribe(); // Cleanup function
+    return () => unsubscribe();
   }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-
-      // Optionally, set a role in localStorage for later use
-      if (email === "customer@support.com") {
-        localStorage.setItem("role", "customer");
-      } else {
-        localStorage.setItem("role", "agent");
-      }
-
-      navigate("/dashboard");
+      const role = email === "customer@support.com" ? "customer" : "agent";
+      localStorage.setItem("role", role);
+      navigate("/");
     } catch (error) {
       setError("Invalid email or password");
     }
   };
-
-  const show = () => {
-    seteye(!eye);
-  };
-
-  if (loading) {
-    return <p>Loading...</p>; 
-  }
 
   return (
     <div className="Formcenter">
@@ -58,7 +42,6 @@ const Login = () => {
           type="email"
           placeholder="Email"
           required
-          name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -69,18 +52,11 @@ const Login = () => {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          name="password"
         />
 
-        {eye ? (
-          <p className="login " onClick={show}>
-            Hide Password
-          </p>
-        ) : (
-          <p className="login" onClick={show}>
-            Show Password
-          </p>
-        )}
+        <p className="login" onClick={() => setEye(!eye)}>
+          {eye ? "Hide Password" : "Show Password"}
+        </p>
 
         <button className="create-account">Log In</button>
         {error && <p style={{ color: "red" }}>{error}</p>}

@@ -13,21 +13,21 @@ import TicketView from "./page/TicketView";
 
 // Define your routes using the new Data API
 const router = createBrowserRouter([
+  // {
+  //   path: "/",
+  //   element: <Navigate to="/login" replace />,
+  // },
   {
     path: "/",
-    element: <Navigate to="/login" replace />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/dashboard",
     element: (
       <PrivateRoute>
         <Dashboard />
       </PrivateRoute>
     ),
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/edit-ticket/:ticketId",
@@ -41,16 +41,16 @@ const router = createBrowserRouter([
     path: "/view-ticket/:ticketId",
     element: (
       <PrivateRoute>
-        <TicketView /> 
+        <TicketView />
       </PrivateRoute>
     ),
   },
 
   // Catch-all route (optional since the "/" redirect is already set)
-  {
-    path: "*",
-    element: <Navigate to="/login" replace />,
-  },
+  // {
+  //   path: "*",
+  //   element: <Navigate to="/login" replace />,
+  // },
 ]);
 
 const App = () => {
