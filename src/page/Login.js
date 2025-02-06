@@ -26,7 +26,7 @@ const Login = () => {
       } else {
         localStorage.setItem("role", "agent");
       }
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       setError("Invalid email or password");
     }
