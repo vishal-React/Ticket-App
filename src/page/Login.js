@@ -15,11 +15,8 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      await signInWithEmailAndPassword(auth, email, password);
+
       // Optionally, set a role in local storage for later use (here we use email to determine role)
       if (email === "customer@support.com") {
         localStorage.setItem("role", "customer");
