@@ -3,7 +3,6 @@ import React from "react";
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate,
 } from "react-router-dom";
 import Login from "./page/Login";
 import Dashboard from "./page/Dashboard";
