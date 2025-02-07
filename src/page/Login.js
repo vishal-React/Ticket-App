@@ -1,6 +1,6 @@
 // src/pages/Login.js
-import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../Firebase";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
@@ -11,6 +11,16 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [eye, seteye] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && localStorage.getItem("role")) {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
